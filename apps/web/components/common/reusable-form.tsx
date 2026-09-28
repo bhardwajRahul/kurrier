@@ -109,6 +109,7 @@ export function ReusableForm({
 		if (!hasSubmittedRef.current) return;
 		if (isPending) return;
 		if (!formState) return;
+		hasSubmittedRef.current = false;
 
 		if (formState.success) {
 			const msg = notify?.successMessage ?? message;
@@ -118,7 +119,7 @@ export function ReusableForm({
 
 		const err = error ?? notify?.errorMessage;
 		if (err) toast.error(err, notify?.toastProps);
-	}, [notifyKind, isPending, formState, notify, formKey, message, error]);
+	}, [notifyKind, isPending, formState, notify, message, error]);
 
 	return (
 		<Form

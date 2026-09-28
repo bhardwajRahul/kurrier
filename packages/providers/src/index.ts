@@ -45,3 +45,4 @@ export function createStore(
 
 export * from "./core";
 export * from "./mail/google-client";
+export { SesMailer } from "./mail/ses";

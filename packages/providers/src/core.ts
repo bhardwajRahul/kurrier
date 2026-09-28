@@ -141,6 +141,7 @@ export interface Mailer {
 			from: string;
 			inReplyTo: string;
 			references: string[];
+			headers?: Record<string, string>;
 			attachments?: { name: string; content: Blob; contentType: string }[];
 		},
 	): Promise<{ success: boolean; MessageId?: string; error?: string }>;

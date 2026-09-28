@@ -78,6 +78,7 @@ export function ReusableFormButton({
 		if (!hasSubmittedRef.current) return;
 		if (isPending) return;
 		if (!formState) return;
+		hasSubmittedRef.current = false;
 
 		if (formState.success) {
 			const msg = notify?.successMessage ?? resolvedMessage;
@@ -87,7 +88,7 @@ export function ReusableFormButton({
 
 		const err = resolvedError ?? notify?.errorMessage;
 		if (err) toast.error(err, notify?.toastProps);
-	}, [notifyKind, isPending, formState, notify, formKey, resolvedMessage, resolvedError]);
+	}, [notifyKind, isPending, formState, notify, resolvedMessage, resolvedError]);
 
 	return (
 		<Form

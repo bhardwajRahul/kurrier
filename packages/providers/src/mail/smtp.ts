@@ -170,6 +170,7 @@ export class SmtpMailer implements Mailer {
 			from: string;
 			inReplyTo: string;
 			references: string[];
+			headers?: Record<string, string>;
 			attachments?: {
 				name: string;
 				content: Blob;
@@ -179,6 +180,7 @@ export class SmtpMailer implements Mailer {
 	): Promise<{
 		success: boolean;
 		MessageId?: string;
+		error?: string;
 	}> {
 		try {
 			const attachments = await Promise.all(
@@ -193,7 +195,7 @@ export class SmtpMailer implements Mailer {
 				})),
 			);
 
-			const headers: Record<string, string> = {};
+			const headers: Record<string, string> = { ...opts.headers };
 
 			if (opts.inReplyTo) {
 				headers["In-Reply-To"] = opts.inReplyTo;
@@ -220,11 +222,18 @@ export class SmtpMailer implements Mailer {
 				success: true,
 				MessageId: String(info.messageId || ""),
 			};
-		} catch (err) {
-			console.error("[smtp-mailer] sendEmail error", err);
+		} catch (error) {
+			console.error("[smtp-mailer] sendEmail error", error);
 
 			return {
 				success: false,
+				error:
+					error &&
+					typeof error === "object" &&
+					"code" in error &&
+					typeof error.code === "string"
+						? error.code
+						: "SmtpSendFailed",
 			};
 		}
 	}
